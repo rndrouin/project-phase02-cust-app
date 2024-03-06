@@ -37,11 +37,15 @@ export function App(params) {
 
   const handleListClick = (item) => {
     log("in handleListClick()");
-    setFormObject(item);
-    setSelectedRow(item.id);
-    setMode('Update');
-    // RD - Set the formObject state and the selected row to the clicked item and the mode state to Update
-  }
+    if (mode === 'Update') {
+      setSelectedRow(null); // Deselect the customer
+      setMode('Add'); // Set the status to 'Add'
+    } else {
+      setFormObject(item);
+      setSelectedRow(item.id);
+      setMode('Update');
+    }
+  };
 
   const handleInputChange = (event) => {
     log("in handleInputChange()");
