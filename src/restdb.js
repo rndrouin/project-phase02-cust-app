@@ -57,24 +57,6 @@ export function get(id) {
   return result;
 }
 
-/* NOT WORKING
-export async function deleteById(id) {
-  try {
-    const response = await fetch(`${baseURL}/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error deleting customer: ${response.status}`);
-    }
-
-    items = items.filter((customer) => customer.id !== id);
-  } catch (error) {
-    alert(error);
-  }
-}
-*/
-
 export async function deleteById(id) {
   try {
     const response = await fetch(`${baseURL}/${id}`, {
