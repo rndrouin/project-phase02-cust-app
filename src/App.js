@@ -1,74 +1,92 @@
 import React, { useState, useEffect } from 'react';
-import { getAll, post, put, deleteById } from './memdb.js'
+import { getAll, post, put, deleteById } from './restdb.js'
 import './App.css';
 import CustomerList from './CustomerList';
 import CustomerAddUpdateForm from './CustomerAddUpdateForm';
 
-function log(message){console.log(message);}
-
+function log(message) {
+  console.log(message);
+}
 
 export function App(params) {
   let blankCustomer = { "id": -1, "name": "", "email": "", "password": "" };
-  //let formObject = customers[0];
+  let items = []; // Add items array
+
   const [customers, setCustomers] = useState([]);
   const [formObject, setFormObject] = useState(blankCustomer);
-  const [selectedRow, setSelectedRow] = useState(null); // RD - Step 9 - Bold List Item - Added state for selected row
-  
-  let mode = (formObject.id >= 0) ? 'Update' : 'Add';
-  useEffect(() => { getCustomers() }, []);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [mode, setMode] = useState('Add');
 
+  useEffect(() => {
+    getCustomers();
+  }, [formObject]);
 
-  const getCustomers =  function(){
+  const getCustomers = async () => {
     log("in getCustomers()");
-    setCustomers(getAll());
+    await getAll(setCustomers);
   }
 
-  const handleListClick = function(item){
+  const getNextId = () => {
+    let maxid = 0;
+    for (let customer of customers) {
+      maxid = Math.max(maxid, customer.id);
+    }
+    return maxid + 1;
+  };
+
+  const handleListClick = (item) => {
     log("in handleListClick()");
-    //RD - Extra Credit - Deselect List Item
     if (item.id === formObject.id) {
       setFormObject(blankCustomer);
       setSelectedRow(null);
+      setMode('Add');
     } else {
       setFormObject(item);
       setSelectedRow(item.id);
+      setMode('Update');
     }
-    //setFormObject(item);
-    //setSelectedRow(item.id); // RD - -Step 9 - Bold List Item - Set the selected row ID
-  }  
+  }
 
-  const handleInputChange = function (event) {
+  const handleInputChange = (event) => {
     log("in handleInputChange()");
     const name = event.target.name;
     const value = event.target.value;
-      let newFormObject = {...formObject}
-        newFormObject[name] = value;
-      setFormObject(newFormObject);
+    let newFormObject = { ...formObject }
+    newFormObject[name] = value;
+    setFormObject(newFormObject);
   }
 
-  let onCancelClick = function () {
+  const onCancelClick = () => {
     log("in onCancelClick()");
-    setSelectedRow(null); //RD - Added to deselect List item
+    setSelectedRow(null);
     setFormObject(blankCustomer);
+    setMode('Add');
   }
 
-  let onDeleteClick = function () {
-    if(formObject.id >= 0){
-      deleteById(formObject.id);
-      }
-      setFormObject(blankCustomer);
+  const onDeleteClick = async () => {
+    if (formObject.id >= 0) {
+      await deleteById(formObject.id);
+      getCustomers();
+    }
+    setFormObject(blankCustomer);
+    setMode('Add');
   }
 
-  let onSaveClick = function () {
+  const onSaveClick = async () => {
     if (mode === 'Add') {
-      post(formObject);
+      const newCustomer = { ...formObject };
+      newCustomer.id = getNextId();
+      await post(newCustomer);
+      getCustomers();
     }
     if (mode === 'Update') {
-      put(formObject.id, formObject);
+      await put(formObject.id, formObject);
+      getCustomers();
     }
     setFormObject(blankCustomer);
+    setMode('Add');
   }
-  
+
   return (
     <div>
       <CustomerList
