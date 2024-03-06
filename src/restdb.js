@@ -67,7 +67,7 @@ export async function deleteById(id) {
       throw new Error(`Error deleting customer: ${response.status}`);
     }
 
-    items = items.filter((customer) => customer.id !== id); // Update the 'items' array directly
+    items = items.filter((customer) => customer.id !== id);
   } catch (error) {
     alert(error);
   }

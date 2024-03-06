@@ -36,15 +36,9 @@ export function App(params) {
 
   const handleListClick = (item) => {
     log("in handleListClick()");
-    if (item.id === formObject.id) {
-      setFormObject(blankCustomer);
-      setSelectedRow(null);
-      setMode('Add');
-    } else {
-      setFormObject(item);
-      setSelectedRow(item.id);
-      setMode('Update');
-    }
+    setFormObject(item);
+    setSelectedRow(item.id);
+    setMode('Update');
   }
 
   const handleInputChange = (event) => {
@@ -64,7 +58,7 @@ export function App(params) {
   }
 
   const onDeleteClick = async () => {
-    if (formObject.id >= 0) {
+    if (formObject.id >= 0 || formObject.id === -1) {
       await deleteById(formObject.id);
       getCustomers();
     }
@@ -85,7 +79,8 @@ export function App(params) {
     }
     setFormObject(blankCustomer);
     setMode('Add');
-  }
+    setSelectedRow(null); // Deselect the customer after updating
+  };
 
   return (
     <div>
