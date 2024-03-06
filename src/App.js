@@ -10,28 +10,29 @@ function log(message) {
 
 export function App(params) {
   let blankCustomer = { "id": -1, "name": "", "email": "", "password": "" };
-  let items = []; // Add items array
+  let items = []; // RD - Array to store items
 
-  const [customers, setCustomers] = useState([]);
-  const [formObject, setFormObject] = useState(blankCustomer);
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [mode, setMode] = useState('Add');
+  const [customers, setCustomers] = useState([]); // RD - State variable for customers
+  const [formObject, setFormObject] = useState(blankCustomer); // RD - State variable for the form data
+  const [selectedRow, setSelectedRow] = useState(null); // RD - State variable for the selected row
+  const [mode, setMode] = useState('Add'); // RD - State variable for the mode (Add or Update)
 
   useEffect(() => {
-    getCustomers();
+    getCustomers(); // RD - Fetch customers when the formObject state changes
   }, [formObject]);
 
   const getCustomers = async () => {
     log("in getCustomers()");
+    // RD - Per Lab Directions. Call getAll function and pass the setCustomers function to update the customer's state
     await getAll(setCustomers);
   }
 
   const getNextId = () => {
     let maxid = 0;
     for (let customer of customers) {
-      maxid = Math.max(maxid, customer.id);
+      maxid = Math.max(maxid, customer.id); // RD - Iterate over the customers array to find the highest ID
     }
-    return maxid + 1;
+    return maxid + 1; // RD - Return the next ID
   };
 
   const handleListClick = (item) => {
@@ -39,50 +40,52 @@ export function App(params) {
     setFormObject(item);
     setSelectedRow(item.id);
     setMode('Update');
+    // RD - Set the formObject state and the selected row to the clicked item and the mode state to Update
   }
 
   const handleInputChange = (event) => {
     log("in handleInputChange()");
     const name = event.target.name;
     const value = event.target.value;
-    let newFormObject = { ...formObject }
-    newFormObject[name] = value;
-    setFormObject(newFormObject);
+    //RD - Get the value of input
+    let newFormObject = { ...formObject } // RD - Create a new object to make a copy of the formObject state
+    newFormObject[name] = value; // RD -  Update the property in the newFormObject
+    setFormObject(newFormObject); //RD - set state
   }
 
   const onCancelClick = () => {
     log("in onCancelClick()");
     setSelectedRow(null);
     setFormObject(blankCustomer);
-    setMode('Add');
+    setMode('Add'); // RD - Set the mode state to 'Add'
   }
 
   const onDeleteClick = async () => {
-    if (formObject.id >= 0 || formObject.id === -1) {
-      await deleteById(formObject.id);
-      getCustomers();
+    if (formObject.id >= 0 || formObject.id === -1) { // RD - Added this to be able to delete the record that had an ID of -1
+      await deleteById(formObject.id); // RD - Call the deleteById function to delete the customer
+      getCustomers(); // RD - get customers
     }
     setFormObject(blankCustomer);
     setMode('Add');
   }
 
   const onSaveClick = async () => {
-    if (mode === 'Add') {
-      const newCustomer = { ...formObject };
-      newCustomer.id = getNextId();
+    if (mode === 'Add') { //RD - If the mode is 'Add'
+      const newCustomer = { ...formObject }; // RD - Create a new object to make a copy of the formObject state
+      newCustomer.id = getNextId(); // RD - Set the ID
       await post(newCustomer);
       getCustomers();
     }
-    if (mode === 'Update') {
-      await put(formObject.id, formObject);
-      getCustomers();
+    if (mode === 'Update') { //RD - If the mode is 'Update'
+      await put(formObject.id, formObject); // RD - Call the put function to update the customer
+      getCustomers(); // RD - Fetch the updated list of customers
     }
     setFormObject(blankCustomer);
     setMode('Add');
-    setSelectedRow(null); // Deselect the customer after updating
+    setSelectedRow(null); // RD - Deselect the customer after updating
   };
 
-  return (
+  return ( //RD - pass below as prop
     <div>
       <CustomerList
         customers={customers}
