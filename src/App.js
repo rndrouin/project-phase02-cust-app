@@ -37,15 +37,16 @@ export function App(params) {
 
   const handleListClick = (item) => {
     log("in handleListClick()");
-    if (mode === 'Update') {
+    if (mode === 'Update' && selectedRow === item.id) {
       setSelectedRow(null); // RD - Deselect the customer
-      setMode('Add'); // RD - Set the status to 'Add'
-      setFormObject(blankCustomer); //RD -  Clear out the name, email, and password fields
-    } else {
-      setFormObject(item);
-      setSelectedRow(item.id);
-      setMode('Update');
+      setMode('Add'); // RD - Set the mode to 'Add'
+      setFormObject(blankCustomer); //RD - Clear out the form fields
+      return; 
     }
+    // RD - Else Select the item and update
+    setFormObject(item);
+    setSelectedRow(item.id);
+    setMode('Update');
   };
 
   const handleInputChange = (event) => {

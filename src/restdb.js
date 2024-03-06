@@ -23,12 +23,6 @@
       fetchData(baseURL); // RD - Call FetchData with baseurl
   }
 
-
-//export function getAll(){
-    // return [...items]; //Troubleshooting returned a copy of the array using spread
-  //  return items;
-//}
-
 export function get(id) {
     let result = null;
     for( let item of items){
@@ -56,15 +50,6 @@ export async function deleteById(id) {
   }
 }
 
-/*
-export function deleteById(id) {
-  let arrayIndex = getArrayIndexForId(id);
-  if( arrayIndex >= 0 && arrayIndex < items.length){
-    items.splice(arrayIndex,1);
-  }
-}
-*/
-
 // RD - Function to add a new customer
 export async function post(item) {
   try {
@@ -87,13 +72,6 @@ export async function post(item) {
     alert(error);
   }
 }
-/*
-export function post(item) {
-  let nextid = getNextId();
-  item.id = nextid;
-  items[items.length] = item;
-}
-*/
 
 // RD - Function to update a customer by ID
 export async function put(id, item) {
