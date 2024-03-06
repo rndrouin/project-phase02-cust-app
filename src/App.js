@@ -38,8 +38,9 @@ export function App(params) {
   const handleListClick = (item) => {
     log("in handleListClick()");
     if (mode === 'Update') {
-      setSelectedRow(null); // Deselect the customer
-      setMode('Add'); // Set the status to 'Add'
+      setSelectedRow(null); // RD - Deselect the customer
+      setMode('Add'); // RD - Set the status to 'Add'
+      setFormObject(blankCustomer); //RD -  Clear out the name, email, and password fields
     } else {
       setFormObject(item);
       setSelectedRow(item.id);
