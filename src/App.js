@@ -113,6 +113,12 @@ if (!commonPasswordRegex.test(formObject.password)) {
 
     if (mode === 'Add') { //RD - If the mode is 'Add'
 
+    // RD - Check if the same customer already exists in the customers array
+   const existingCustomer = customers.find(customer => customer.name === formObject.name && customer.email === formObject.email);
+   if (existingCustomer) {
+     alert("A customer with the same name and email already exists.");
+     return;
+   }
       const newCustomer = { ...formObject }; // RD - Create a new object to make a copy of the formObject state
       newCustomer.id = getNextId(); // RD - Set the ID
       await post(newCustomer);
@@ -120,6 +126,13 @@ if (!commonPasswordRegex.test(formObject.password)) {
     }
     if (mode === 'Update') { //RD - If the mode is 'Update'
       
+       // RD - Check if any field has changed
+       const NoChangeCustomer = customers.find(customer => customer.name === formObject.name && customer.email === formObject.email && customer.password === formObject.password);
+       if (NoChangeCustomer) {
+         alert("Please make a change to one of the fields before updating");
+         return;
+      }
+
       await put(formObject.id, formObject); // RD - Call the put function to update the customer
       getCustomers(); // RD - Fetch the updated list of customers
     }
