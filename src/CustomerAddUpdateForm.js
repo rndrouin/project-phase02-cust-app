@@ -1,4 +1,5 @@
 import React from 'react'
+import './App.css';
 
 function CustomerAddUpdateForm({
     formObject,
@@ -46,9 +47,9 @@ function CustomerAddUpdateForm({
             </tr>
             <tr className="button-bar">
               <td colSpan="2">
-                <input type="button" value="Delete" onClick={onDeleteClick} />
-                <input type="button" value="Save" onClick={onSaveClick} />
-                <input type="button" value="Cancel" onClick={onCancelClick} />
+                <input type="button" className="button" value="Delete" onClick={onDeleteClick} />
+                <input type="button" className="button" value="Save" onClick={onSaveClick} />
+                <input type="button" className="button" value="Cancel" onClick={onCancelClick} />
               </td>
             </tr>
           </tbody>
