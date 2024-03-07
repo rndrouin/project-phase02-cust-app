@@ -1,5 +1,6 @@
   // RD - Declare an empty array
   let items = [];
+  
   // RD - Define the Base URL for API Requests
   const baseURL = 'http://localhost:4000/customers';
 

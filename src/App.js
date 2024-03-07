@@ -78,9 +78,9 @@ export function App(params) {
   const onSaveClick = async () => {
     if (mode === 'Add') { //RD - If the mode is 'Add'
      
-      // Check if any of the required fields are blank
+      // RD - Check if any of the required fields are blank
     if (!formObject.name || !formObject.email || !formObject.password) {
-      alert("Please enter information into all the fields.");
+      alert("In order to add a customer, please enter information into all the fields.");
       return; // RD - Exit the function without adding the record
     }
 
@@ -90,6 +90,13 @@ export function App(params) {
       getCustomers();
     }
     if (mode === 'Update') { //RD - If the mode is 'Update'
+      
+      // RD - Check if any of the required fields are blank
+      if (!formObject.name || !formObject.email || !formObject.password) {
+        alert("In order to update a customer, please enter information into all the fields.");
+        return; // RD - Exit the function without adding the record
+      }
+      
       await put(formObject.id, formObject); // RD - Call the put function to update the customer
       getCustomers(); // RD - Fetch the updated list of customers
     }
