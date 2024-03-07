@@ -67,6 +67,11 @@ export function App(params) {
   }
 
   const onDeleteClick = async () => {
+    if (mode === 'Add') {
+      alert("Please select a customer before deleting."); // Display message if mode is add and no employee is selected
+      return;
+    }
+
     if (formObject.id >= 0 || formObject.id === -1) { // RD - Added this to be able to delete the record that had an ID of -1
       await deleteById(formObject.id); // RD - Call the deleteById function to delete the customer
       getCustomers(); // RD - get customers
