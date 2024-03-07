@@ -17,6 +17,10 @@ export function App(params) {
   const [selectedRow, setSelectedRow] = useState(null); // RD - State variable for the selected row
   const [mode, setMode] = useState('Add'); // RD - State variable for the mode (Add or Update)
 
+const nameValidationRegex = /^[a-zA-Z\s]+$/; //RD - Googled Syntax
+const emailValidationRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b/gm; //RD - Googled and then got expression from Ron
+const commonPasswordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{6,}$/; //RD - Googled Syntax
+
   useEffect(() => {
     getCustomers(); // RD - Fetch customers when the formObject state changes
   }, [formObject]);
@@ -68,7 +72,7 @@ export function App(params) {
 
   const onDeleteClick = async () => {
     if (mode === 'Add') {
-      alert("Please select a customer before deleting."); // Display message if mode is add and no employee is selected
+      alert("Please select a customer to delete."); // Display message if mode is add and no employee is selected
       return;
     }
 
@@ -81,13 +85,33 @@ export function App(params) {
   }
 
   const onSaveClick = async () => {
-    if (mode === 'Add') { //RD - If the mode is 'Add'
-     
-      // RD - Check if any of the required fields are blank
-    if (!formObject.name || !formObject.email || !formObject.password) {
-      alert("In order to add a customer, please enter information into all the fields.");
+  
+    // RD - Check if any of the required fields are blank
+  if (!formObject.name || !formObject.email || !formObject.password) {
+     alert("In order to add a customer, please enter information into all the fields.");
       return; // RD - Exit the function without adding the record
-    }
+  }
+
+    // RD - Validate name format
+  if (!nameValidationRegex.test(formObject.name)) {
+    alert("Please enter a valid name with letters and spaces only.");
+    return;
+  }
+
+  // RD - Validate email format
+  if (!emailValidationRegex.test(formObject.email)) {
+    alert("Please enter a valid email address");
+    return;
+  }
+
+
+//RD - Password validation
+if (!commonPasswordRegex.test(formObject.password)) {
+  alert("Password must contain: One Letter, One Number, and be a minimum of 6 characters in length")
+  return;
+}
+
+    if (mode === 'Add') { //RD - If the mode is 'Add'
 
       const newCustomer = { ...formObject }; // RD - Create a new object to make a copy of the formObject state
       newCustomer.id = getNextId(); // RD - Set the ID
@@ -95,12 +119,6 @@ export function App(params) {
       getCustomers();
     }
     if (mode === 'Update') { //RD - If the mode is 'Update'
-      
-      // RD - Check if any of the required fields are blank
-      if (!formObject.name || !formObject.email || !formObject.password) {
-        alert("In order to update a customer, please enter information into all the fields.");
-        return; // RD - Exit the function without adding the record
-      }
       
       await put(formObject.id, formObject); // RD - Call the put function to update the customer
       getCustomers(); // RD - Fetch the updated list of customers
