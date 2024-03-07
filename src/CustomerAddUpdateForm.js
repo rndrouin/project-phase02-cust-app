@@ -38,8 +38,8 @@ function CustomerAddUpdateForm({
             </tr>
             <tr>
               <td className={'label'} >Pass:</td>
-              <td><input
-                type="text"
+              <td className="password-td"><input // RD - Bring text box left for password
+                type="password"
                 name="password"
                 onChange={(e) => handleInputChange(e)}
                 value={formObject.password}
