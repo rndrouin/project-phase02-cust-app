@@ -77,6 +77,13 @@ export function App(params) {
 
   const onSaveClick = async () => {
     if (mode === 'Add') { //RD - If the mode is 'Add'
+     
+      // Check if any of the required fields are blank
+    if (!formObject.name || !formObject.email || !formObject.password) {
+      alert("Please enter information into all the fields.");
+      return; // RD - Exit the function without adding the record
+    }
+
       const newCustomer = { ...formObject }; // RD - Create a new object to make a copy of the formObject state
       newCustomer.id = getNextId(); // RD - Set the ID
       await post(newCustomer);
@@ -91,7 +98,7 @@ export function App(params) {
     setSelectedRow(null); // RD - Deselect the customer after updating
   };
 
-  return ( //RD - pass below as prop
+  return ( //RD - pass below information as prop
     <div>
       <CustomerList
         customers={customers}
