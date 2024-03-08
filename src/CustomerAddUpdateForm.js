@@ -37,7 +37,7 @@ function CustomerAddUpdateForm({
                 placeholder="name@company.com" /></td>
             </tr>
             <tr>
-              <td className={'label'} >Pass:</td>
+              <td className={'label'} >Password:</td>
               <td className="password-td"><input // RD - Bring text box left for password
                 type="password"
                 name="password"
